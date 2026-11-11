@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ultra Finance - Cyber Edition (ภาษาไทย)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07090e; --card: #111622; --card2: #1a2030; --tx: #f8fafc; --mut: #64748b; --bd: #1e293b;
+  --pri: #0ea5e9; --soft: rgba(14, 165, 233, 0.15); --glow: rgba(14, 165, 233, 0.3);
+  --bad: #ef4444; --good: #10b981; --warn: #f59e0b;
+  --sh: 0 10px 30px rgba(0,0,0,0.5); --ease: cubic-bezier(.22,1,.36,1);
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--tx); font-family: "Prompt", "Space Grotesk", sans-serif; min-height: 100vh; overflow-x: hidden; }
+body { padding-top: env(safe-area-inset-top, 0px); }
+.app { max-width: 480px; margin: 0 auto; padding: 16px 16px 120px; }
+
+h1 { font-size: 20px; font-weight: 700; margin: 0 0 16px; display: flex; justify-content: space-between; align-items: center; }
+h1 small { font-size: 11px; color: var(--mut); font-weight: 500; display: block; text-transform: uppercase; letter-spacing: 1px; }
+.card { background: var(--card); border: 1px solid var(--bd); border-radius: 18px; padding: 18px; margin-bottom: 14px; box-shadow: var(--sh); position: relative; overflow: hidden; }
+.card h3 { margin: 0 0 14px; font-size: 13px; font-weight: 600; color: var(--mut); letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
+
+.view { display: none; } .view.on { display: block; animation: fade .35s var(--ease) both; }
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.hero { background: linear-gradient(135deg, var(--card) 0%, #0d121f 100%); border-left: 4px solid var(--pri); }
+.net-val { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; margin: 4px 0 12px; }
+.net-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(0,0,0,0.25); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
+.net-item { font-size: 12px; color: var(--mut); }
+.net-item b { display: block; font-size: 16px; color: var(--tx); margin-top: 2px; }
+
+.cap-box { display: flex; align-items: center; gap: 12px; background: var(--soft); border: 1px solid var(--pri); border-radius: 14px; padding: 12px 14px; font-size: 13px; margin-bottom: 14px; }
+.cap-box i { font-size: 20px; }
+
+.presets { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px; scrollbar-width: none; }
+.preset-btn { flex: none; background: var(--card); border: 1px solid var(--bd); border-radius: 12px; padding: 8px 12px; font-size: 12px; color: var(--tx); display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+.bar-chart { display: flex; gap: 8px; align-items: flex-end; height: 110px; padding-top: 20px; }
+.bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; font-size: 11px; color: var(--mut); gap: 6px; justify-content: flex-end; }
+.bar-fill { width: 100%; max-width: 20px; border-radius: 4px; background: var(--bd); transition: height .8s var(--ease); }
+.bar-col.now .bar-fill { background: var(--pri); box-shadow: 0 0 10px var(--glow); }
+
+.item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--bd); }
+.item:last-child { border-bottom: 0; }
+.ic { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-size: 18px; background: var(--bd); flex: none; }
+.item .m { flex: 1; min-width: 0; }
+.item .m div { font-weight: 500; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item .m span { font-size: 11px; color: var(--mut); display: block; }
+.amt-inc { color: var(--good); } .amt-exp { color: var(--tx); }
+
+.in { width: 100%; border: 1px solid var(--bd); background: var(--bg); color: var(--tx); border-radius: 12px; padding: 12px; font: inherit; font-size: 14px; margin-top: 6px; }
+.in:focus { border-color: var(--pri); }
+.btn { width: 100%; border: 0; border-radius: 12px; padding: 14px; font: inherit; font-weight: 600; color: #fff; background: var(--pri); cursor: pointer; box-shadow: 0 4px 16px var(--glow); margin-top: 12px; }
+.btn-sec { background: var(--bd); color: var(--tx); box-shadow: none; }
+
+nav { position: fixed; left: 0; bottom: 0; width: 100%; background: rgba(17, 22, 34, 0.95); backdrop-filter: blur(10px); border-top: 1px solid var(--bd); display: flex; padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px)); z-index: 50; }
+nav button { flex: 1; border: 0; background: none; color: var(--mut); font: inherit; font-size: 11px; padding: 6px 0; border-radius: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+nav button.on { color: var(--pri); font-weight: 600; }
+nav svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fab { position: fixed; right: 18px; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); width: 54px; height: 54px; border-radius: 16px; border: 0; background: var(--pri); color: #fff; font-size: 26px; box-shadow: 0 6px 20px var(--glow); z-index: 51; }
+
+.ov { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: .3s; z-index: 100; } .ov.on { opacity: 1; pointer-events: auto; }
+.sheet { position: fixed; left: 0; bottom: 0; width: 100%; transform: translateY(100%); background: var(--card); border-radius: 24px 24px 0 0; padding: 20px 20px calc(24px + env(safe-area-inset-bottom,0px)); z-index: 101; transition: transform .35s var(--ease); border-top: 1px solid var(--bd); max-height: 90vh; overflow-y: auto; } .sheet.on { transform: none; }
+.grab { width: 32px; height: 4px; border-radius: 4px; background: var(--bd); margin: 0 auto 16px; }
+
+.type-sw { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg); padding: 4px; border-radius: 12px; margin-bottom: 14px; border: 1px solid var(--bd); }
+.type-sw button { padding: 10px; border: 0; border-radius: 8px; background: none; color: var(--mut); font-weight: 600; font-size: 13px; }
+.type-sw button.exp.on { background: var(--bad); color: #fff; }
+.type-sw button.inc.on { background: var(--good); color: #fff; }
+
+.cg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
+.cg button { border: 1px solid var(--bd); background: var(--bg); color: var(--tx); border-radius: 10px; padding: 8px 4px; font: inherit; font-size: 12px; text-align: center; }
+.cg button.on { border-color: var(--pri); background: var(--soft); color: var(--pri); }
+.cg button span { display: block; font-size: 18px; margin-bottom: 2px; }
+
+.history-filters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.history-actions { display: flex; gap: 8px; }
+.history-actions button { border: 1px solid var(--bd); background: var(--bg); color: var(--tx); border-radius: 8px; padding: 6px 9px; font: inherit; font-size: 11px; }
+.history-actions .delete { color: var(--bad); }
+.stat-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+.stat-tile { background: var(--bg); border: 1px solid var(--bd); border-radius: 12px; padding: 12px; color: var(--mut); font-size: 11px; }
+.stat-tile b { display: block; color: var(--tx); font-size: 15px; margin-top: 4px; }
+.stat-row { display: flex; justify-content: space-between; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--bd); font-size: 12px; }
+.stat-row:last-child { border-bottom: 0; }
+.stat-track { height: 5px; background: var(--bd); border-radius: 5px; margin-top: 6px; overflow: hidden; }
+.stat-track span { display: block; height: 100%; background: var(--pri); }
+.budget-track { height: 7px; background: var(--bd); border-radius: 7px; margin-top: 10px; overflow: hidden; }
+.budget-track span { display: block; height: 100%; background: var(--pri); }
+
+.toast { position: fixed; left: 50%; top: calc(16px + env(safe-area-inset-top,0px)); transform: translate(-50%, -100px); background: var(--pri); color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; z-index: 200; transition: transform .3s var(--ease); box-shadow: 0 4px 16px var(--glow); } .toast.on { transform: translate(-50%, 0); }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <h1><span id="pageTitle">หน้าหลัก</span><small id="pageSub">ระบบพร้อมใช้งาน</small></h1>
+
+  <!-- หน้าหลัก -->
+  <section class="view on" id="v-home">
+    <div class="card hero">
+      <div style="font-size:12px; color:var(--mut); font-weight:600;">ยอดเงินคงเหลือสุทธิ</div>
+      <div class="net-val" id="netBal">0.00 <span style="font-size:16px; color:var(--mut);">บาท</span></div>
+      <div class="net-grid">
+        <div class="net-item">รายรับรวม<b id="incVal" style="color:var(--good)">+0.00</b></div>
+        <div class="net-item">รายจ่ายรวม<b id="expVal" style="color:var(--bad)">-0.00</b></div>
+      </div>
+    </div>
+
+    <div class="cap-box" id="dailyCapBox">
+      <i>💡</i>
+      <div style="flex:1;"><b>เพดานรายจ่ายต่อวัน:</b> เฉลี่ยใช้ได้อีก <span id="dailyCapVal">0</span> บาท/วัน
+        <div id="budgetCycleSummary" style="font-size:11px; margin-top:5px;"></div>
+        <div class="budget-track"><span id="budgetProgress"></span></div>
+      </div>
+    </div>
+
+    <div style="font-size:12px; color:var(--mut); font-weight:600; margin-bottom:8px;">รายการที่จดบ่อย</div>
+    <div class="presets" id="presetBar"></div>
+
+    <div class="card">
+      <h3><span>แนวโน้มรายจ่าย (7 วันล่าสุด)</span></h3>
+      <div class="bar-chart" id="weekBars"></div>
+    </div>
+
+    <div class="card">
+      <h3><span>รายการล่าสุด</span></h3>
+      <div id="recentList"></div>
+    </div>
+  </section>
+
+  <!-- หน้าประวัติ -->
+  <section class="view" id="v-hist">
+    <div class="card">
+      <div class="history-filters">
+        <input class="in" id="searchIn" placeholder="🔍 ค้นหารายการ หรือ แท็ก..." style="margin-top:0; grid-column:1/-1;">
+        <select class="in" id="historyType" aria-label="ประเภท">
+          <option value="all">ทุกประเภท</option><option value="exp">รายจ่าย</option><option value="inc">รายรับ</option>
+        </select>
+        <select class="in" id="historyCategory" aria-label="หมวดหมู่">
+          <option value="all">ทุกหมวดหมู่</option>
+        </select>
+      </div>
+      <div id="histList" style="margin-top:14px;"></div>
+    </div>
+  </section>
+
+  <!-- หน้าสถิติ -->
+  <section class="view" id="v-stat">
+    <div class="card">
+      <h3><span>สถิติรอบงบประมาณ</span></h3>
+      <div id="statPeriod" style="font-size:11px; color:var(--mut); margin-bottom:12px;"></div>
+      <div id="statBreakdown"></div>
+    </div>
+  </section>
+
+  <!-- หน้าตั้งค่า -->
+  <section class="view" id="v-setup">
+    <div class="card">
+      <h3><span>งบประมาณและข้อมูล</span></h3>
+      <label class="net-item">งบประมาณรายเดือน (ลิมิตสูงสุด)</label>
+      <input class="in" id="cfgBudget" type="number" min="0" step="0.01" placeholder="5000">
+      <label class="net-item" style="margin-top:10px; display:block;">วันเริ่มรอบงบประมาณ (วันที่ 1-28)</label>
+      <input class="in" id="cfgCycleDay" type="number" min="1" max="28" value="1">
+    </div>
+
+    <div class="card">
+      <h3><span>ปรับแต่งธีม</span></h3>
+      <label class="net-item">เลือกสีนีออน (ACCENT COLOR)</label>
+      <input type="color" id="cfgColor" class="in" style="height:44px; padding:4px; cursor:pointer;" value="#0ea5e9">
+    </div>
+
+    <div class="card">
+      <h3><span>สำรองข้อมูล & ส่งออก</span></h3>
+      <button class="btn btn-sec" id="btnExportCSV">📥 ส่งออกไฟล์ CSV (Excel)</button>
+      <div style="font-size:11px; color:var(--mut); margin-top:12px; text-align:center;" id="storageQuota">พื้นที่ที่ใช้: 0 KB</div>
+    </div>
+  </section>
+</div>
+
+<button class="fab" id="fab">+</button>
+
+<nav>
+  <button data-v="home" class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>หน้าหลัก</button>
+  <button data-v="hist"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>ประวัติ</button>
+  <button data-v="stat"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>สถิติ</button>
+  <button data-v="setup"><svg viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>ตั้งค่า</button>
+</nav>
+
+<!-- หน้าต่างบันทึกรายการ -->
+<div class="ov" id="ov"></div>
+<div class="sheet" id="sheet">
+  <div class="grab"></div>
+  <h3 id="sheetTitle" style="margin:0 0 14px; text-align:center;">บันทึกรายการ</h3>
+  <div class="type-sw">
+    <button class="exp on" id="swExp">รายจ่าย 🔴</button>
+    <button class="inc" id="swInc">รายรับ 🟢</button>
+  </div>
+  <input class="in" id="txAmt" type="number" inputmode="decimal" placeholder="0.00" style="font-size:28px; font-weight:700; text-align:center;">
+  <div class="cg" id="catGrid"></div>
+  <input class="in" id="txNote" placeholder="รายละเอียด / แท็ก (เช่น #ข้าวเที่ยง)">
+  <input class="in" id="txDate" type="date">
+  <button class="btn" id="btnSaveTx">บันทึกรายการ</button>
+</div>
+
+<div class="toast" id="toast">บันทึกเรียบร้อย!</div>
+
+<script>
+const CATS = [
+  {k:"อาหาร", e:"🍔"}, {k:"เดินทาง", e:"🚕"}, {k:"ช้อปปิ้ง", e:"🛒"},
+  {k:"บันเทิง", e:"🎮"}, {k:"สาธารณูปโภค", e:"💡"}, {k:"รายรับ", e:"💸"}
+];
+
+let items = JSON.parse(localStorage.getItem("cyber_tx") || "[]");
+let cfg = {budget:5000, cycle:1, color:"#0ea5e9", ...JSON.parse(localStorage.getItem("cyber_cfg") || "{}")};
+let txType = "exp", selCat = "อาหาร", curView = "home", editingId = null;
+
+const $ = id => document.getElementById(id);
+const fmt = n => Number(n || 0).toLocaleString("th-TH", {minimumFractionDigits:2, maximumFractionDigits:2});
+const DAY_MS = 86400000;
+
+function dateKey(date) {
+  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
+}
+
+function dateFromKey(value) {
+  const [year, month, day] = String(value || "").split("-").map(Number);
+  return year && month && day ? new Date(year, month - 1, day) : null;
+}
+
+function cyclePeriod(now = new Date()) {
+  const cycleDay = Math.min(28, Math.max(1, Number(cfg.cycle) || 1));
+  const start = new Date(now.getFullYear(), now.getMonth() - (now.getDate() < cycleDay ? 1 : 0), cycleDay);
+  const end = new Date(start.getFullYear(), start.getMonth() + 1, cycleDay);
+  const todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  const endUtc = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate());
+  return { start, end, daysLeft: Math.max(1, Math.ceil((endUtc - todayUtc) / DAY_MS)) };
+}
+
+function saveItems() {
+  localStorage.setItem("cyber_tx", JSON.stringify(items));
+}
+
+function saveConfig() {
+  localStorage.setItem("cyber_cfg", JSON.stringify(cfg));
+}
+
+function applyTheme() {
+  document.documentElement.style.setProperty("--pri", cfg.color || "#0ea5e9");
+  document.documentElement.style.setProperty("--glow", (cfg.color || "#0ea5e9") + "40");
+}
+
+function createRecordRow(item, withActions = false) {
+  const row = document.createElement("div");
+  row.className = "item";
+  const icon = document.createElement("div");
+  icon.className = "ic";
+  icon.textContent = CATS.find(category => category.k === item.c)?.e || "⚡";
+  const main = document.createElement("div");
+  main.className = "m";
+  const title = document.createElement("div");
+  title.textContent = item.n || item.c;
+  const meta = document.createElement("span");
+  meta.textContent = `${item.d || ""} • ${item.c || ""}`;
+  main.append(title, meta);
+  const amount = document.createElement("b");
+  amount.className = item.t === "inc" ? "amt-inc" : "amt-exp";
+  amount.textContent = `${item.t === "inc" ? "+" : "-"}${fmt(item.a)}`;
+  row.append(icon, main, amount);
+  if (withActions) {
+    const actions = document.createElement("div");
+    actions.className = "history-actions";
+    const edit = document.createElement("button");
+    edit.type = "button";
+    edit.dataset.action = "edit";
+    edit.dataset.id = item.id;
+    edit.textContent = "แก้ไข";
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "delete";
+    remove.dataset.action = "delete";
+    remove.dataset.id = item.id;
+    remove.textContent = "ลบ";
+    actions.append(edit, remove);
+    row.append(actions);
+  }
+  return row;
+}
+
+function renderHistory() {
+  const query = $("searchIn").value.trim().toLocaleLowerCase("th-TH");
+  const type = $("historyType").value;
+  const category = $("historyCategory").value;
+  const filtered = [...items].reverse().filter(item => {
+    const searchable = `${item.n || ""} ${item.c || ""} ${item.d || ""}`.toLocaleLowerCase("th-TH");
+    return (!query || searchable.includes(query)) &&
+      (type === "all" || item.t === type) &&
+      (category === "all" || item.c === category);
+  });
+  const list = $("histList");
+  list.replaceChildren();
+  if (!filtered.length) {
+    const empty = document.createElement("div");
+    empty.style.cssText = "color:var(--mut); font-size:13px; text-align:center; padding:16px 0;";
+    empty.textContent = items.length ? "ไม่พบรายการที่ตรงกัน" : "ยังไม่มีรายการบันทึก";
+    list.append(empty);
+    return;
+  }
+  filtered.forEach(item => list.append(createRecordRow(item, true)));
+}
+
+function renderStats(period) {
+  const startKey = dateKey(period.start), endKey = dateKey(period.end);
+  const current = items.filter(item => item.d >= startKey && item.d < endKey);
+  const income = current.filter(item => item.t === "inc").reduce((sum, item) => sum + Number(item.a || 0), 0);
+  const expense = current.filter(item => item.t !== "inc").reduce((sum, item) => sum + Number(item.a || 0), 0);
+  const byCategory = new Map();
+  current.filter(item => item.t !== "inc").forEach(item => byCategory.set(item.c || "อื่นๆ", (byCategory.get(item.c || "อื่นๆ") || 0) + Number(item.a || 0)));
+  const breakdown = $("statBreakdown");
+  breakdown.replaceChildren();
+  $("statPeriod").textContent = `รอบ ${period.start.toLocaleDateString("th-TH")} – ${new Date(period.end.getTime() - DAY_MS).toLocaleDateString("th-TH")}`;
+
+  const summary = document.createElement("div");
+  summary.className = "stat-summary";
+  [
+    ["รายรับ", `+${fmt(income)}`],
+    ["รายจ่าย", `-${fmt(expense)}`],
+    ["คงเหลือสุทธิ", fmt(income - expense)],
+    ["จำนวนรายการ", `${current.length} รายการ`]
+  ].forEach(([label, value]) => {
+    const tile = document.createElement("div");
+    tile.className = "stat-tile";
+    const name = document.createElement("span");
+    name.textContent = label;
+    const amount = document.createElement("b");
+    amount.textContent = value;
+    tile.append(name, amount);
+    summary.append(tile);
+  });
+  breakdown.append(summary);
+
+  const heading = document.createElement("div");
+  heading.style.cssText = "font-size:12px; color:var(--mut); margin-bottom:4px;";
+  heading.textContent = "รายจ่ายแยกตามหมวด";
+  breakdown.append(heading);
+  const categories = [...byCategory.entries()].sort((a, b) => b[1] - a[1]);
+  if (!categories.length) {
+    const empty = document.createElement("div");
+    empty.style.cssText = "color:var(--mut); font-size:12px; padding:8px 0;";
+    empty.textContent = "ยังไม่มีรายจ่ายในรอบนี้";
+    breakdown.append(empty);
+    return;
+  }
+  categories.forEach(([name, amount]) => {
+    const row = document.createElement("div");
+    row.className = "stat-row";
+    const label = document.createElement("span");
+    label.textContent = name;
+    const value = document.createElement("b");
+    value.textContent = fmt(amount);
+    row.append(label, value);
+    const track = document.createElement("div");
+    track.className = "stat-track";
+    const fill = document.createElement("span");
+    fill.style.width = `${Math.min(100, amount / expense * 100)}%`;
+    track.append(fill);
+    breakdown.append(row, track);
+  });
+}
+
+function renderWeek() {
+  const bars = $("weekBars");
+  bars.replaceChildren();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const days = Array.from({length:7}, (_, index) => {
+    const date = new Date(today);
+    date.setDate(today.getDate() - (6 - index));
+    const key = dateKey(date);
+    const total = items.filter(item => item.t !== "inc" && item.d === key).reduce((sum, item) => sum + Number(item.a || 0), 0);
+    return { date, total };
+  });
+  const max = Math.max(1, ...days.map(day => day.total));
+  days.forEach((day, index) => {
+    const column = document.createElement("div");
+    column.className = `bar-col${index === 6 ? " now" : ""}`;
+    const fill = document.createElement("div");
+    fill.className = "bar-fill";
+    fill.style.height = `${day.total ? Math.max(6, day.total / max * 70) : 3}px`;
+    fill.title = `${fmt(day.total)} บาท`;
+    const label = document.createElement("span");
+    label.textContent = day.date.toLocaleDateString("th-TH", {day:"numeric", month:"numeric"});
+    column.append(fill, label);
+    bars.append(column);
+  });
+}
+
+function render() {
+  applyTheme();
+  const totalInc = items.filter(item => item.t === "inc").reduce((sum, item) => sum + Number(item.a || 0), 0);
+  const totalExp = items.filter(item => item.t !== "inc").reduce((sum, item) => sum + Number(item.a || 0), 0);
+  $("netBal").innerHTML = `${fmt(totalInc - totalExp)} <span style="font-size:16px; color:var(--mut);">บาท</span>`;
+  $("incVal").textContent = "+" + fmt(totalInc);
+  $("expVal").textContent = "-" + fmt(totalExp);
+
+  const period = cyclePeriod();
+  const startKey = dateKey(period.start), endKey = dateKey(period.end);
+  const cycleExpense = items.filter(item => item.t !== "inc" && item.d >= startKey && item.d < endKey)
+    .reduce((sum, item) => sum + Number(item.a || 0), 0);
+  const budget = Math.max(0, Number(cfg.budget) || 0);
+  const remaining = Math.max(0, budget - cycleExpense);
+  $("dailyCapVal").textContent = fmt(remaining / period.daysLeft);
+  $("budgetCycleSummary").textContent = `รอบนี้ใช้ ${fmt(cycleExpense)} / ${fmt(budget)} บาท`;
+  $("budgetProgress").style.width = `${budget ? Math.min(100, cycleExpense / budget * 100) : 0}%`;
+  $("cfgBudget").value = cfg.budget;
+  $("cfgCycleDay").value = cfg.cycle;
+  $("cfgColor").value = cfg.color || "#0ea5e9";
+
+  $("presetBar").innerHTML = [
+    {n:"กาแฟ", a:60, c:"อาหาร"}, {n:"ข้าวเที่ยง", a:70, c:"อาหาร"}, {n:"เดินทาง", a:45, c:"เดินทาง"}
+  ].map(p => `<div class="preset-btn" onclick="quickAdd('${p.n}',${p.a},'${p.c}')"><span>+</span> ${p.n} (${p.a}฿)</div>`).join("");
+
+  const recent = [...items].reverse().slice(0, 5);
+  const recentList = $("recentList");
+  recentList.replaceChildren();
+  if (recent.length) recent.forEach(item => recentList.append(createRecordRow(item)));
+  else {
+    const empty = document.createElement("div");
+    empty.style.cssText = "color:var(--mut); font-size:13px; text-align:center;";
+    empty.textContent = "ยังไม่มีรายการบันทึก";
+    recentList.append(empty);
+  }
+
+  const categorySelect = $("historyCategory");
+  const selectedCategory = categorySelect.value;
+  categorySelect.replaceChildren(new Option("ทุกหมวดหมู่", "all"));
+  CATS.forEach(category => categorySelect.add(new Option(category.k, category.k)));
+  categorySelect.value = CATS.some(category => category.k === selectedCategory) ? selectedCategory : "all";
+  renderHistory();
+  renderStats(period);
+  renderWeek();
+  $("storageQuota").textContent = `พื้นที่ที่ใช้: ${(new Blob([JSON.stringify(localStorage)]).size / 1024).toFixed(1)} KB`;
+}
+
+function quickAdd(n, a, c) {
+  items.push({ id: Date.now(), t: "exp", a, c, n, d: dateKey(new Date()) });
+  saveItems();
+  render(); toast("บันทึกด่วนเรียบร้อย!");
+}
+
+function toast(m) {
+  const t = $("toast"); t.textContent = m; t.classList.add("on");
+  setTimeout(() => t.classList.remove("on"), 2000);
+}
+
+function renderSheet() {
+  $("catGrid").innerHTML = CATS.map(c => `<button class="${c.k===selCat?'on':''}" onclick="selCat='${c.k}';renderSheet();"><span>${c.e}</span>${c.k}</button>`).join("");
+}
+
+function openTransaction(id = null) {
+  editingId = id;
+  const item = id === null ? null : items.find(record => String(record.id) === String(id));
+  txType = item?.t || "exp";
+  selCat = item?.c || "อาหาร";
+  $("sheetTitle").textContent = item ? "แก้ไขรายการ" : "บันทึกรายการ";
+  $("txAmt").value = item ? item.a : "";
+  $("txNote").value = item ? item.n || "" : "";
+  $("txDate").value = item ? item.d : dateKey(new Date());
+  $("swExp").classList.toggle("on", txType === "exp");
+  $("swInc").classList.toggle("on", txType === "inc");
+  renderSheet();
+  $("ov").classList.add("on");
+  $("sheet").classList.add("on");
+}
+
+function closeTransaction() {
+  $("ov").classList.remove("on");
+  $("sheet").classList.remove("on");
+  editingId = null;
+}
+
+document.querySelectorAll("nav button").forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll("nav button").forEach(x => x.classList.remove("on"));
+    document.querySelectorAll(".view").forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    curView = b.dataset.v;
+    $("v-" + curView).classList.add("on");
+    $("pageTitle").textContent = b.textContent.trim();
+    render();
+  };
+});
+
+$("fab").onclick = () => openTransaction();
+$("ov").onclick = closeTransaction;
+$("swExp").onclick = () => { txType="exp"; $("swExp").classList.add("on"); $("swInc").classList.remove("on"); };
+$("swInc").onclick = () => { txType="inc"; $("swInc").classList.add("on"); $("swExp").classList.remove("on"); };
+
+$("btnSaveTx").onclick = () => {
+  const amount = Number($("txAmt").value);
+  if (!Number.isFinite(amount) || amount <= 0 || !$("txDate").value) {
+    toast("กรุณากรอกจำนวนเงินและวันที่ให้ถูกต้อง");
+    return;
+  }
+  const wasEditing = editingId !== null;
+  const record = { id: wasEditing ? editingId : Date.now(), t: txType, a: amount, c: selCat, n: $("txNote").value.trim(), d: $("txDate").value };
+  if (!wasEditing) items.push(record);
+  else items = items.map(item => String(item.id) === String(editingId) ? record : item);
+  saveItems();
+  closeTransaction();
+  render(); toast(wasEditing ? "แก้ไขรายการแล้ว" : "บันทึกสำเร็จ!");
+};
+
+$("histList").onclick = event => {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+  const id = button.dataset.id;
+  if (button.dataset.action === "edit") openTransaction(id);
+  if (button.dataset.action === "delete" && confirm("ต้องการลบรายการนี้หรือไม่?")) {
+    items = items.filter(item => String(item.id) !== String(id));
+    saveItems();
+    render(); toast("ลบรายการแล้ว");
+  }
+};
+
+["searchIn", "historyType", "historyCategory"].forEach(id => {
+  $(id).addEventListener(id === "searchIn" ? "input" : "change", renderHistory);
+});
+
+$("btnExportCSV").onclick = () => {
+  let csv = "ID,ประเภท,จำนวนเงิน,หมวดหมู่,โน้ต,วันที่\n" + items.map(i => `${i.id},${i.t},${i.a},${i.c},"${i.n||''}",${i.d}`).join("\n");
+  let blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  let a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "finance_export.csv"; a.click();
+};
+
+$("cfgColor").onchange = e => { cfg.color = e.target.value; localStorage.setItem("cyber_cfg", JSON.stringify(cfg)); render(); };
+$("cfgBudget").onchange = e => {
+  const value = Number(e.target.value);
+  if (e.target.value.trim() === "" || !Number.isFinite(value) || value < 0) {
+    toast("งบประมาณต้องเป็นตัวเลขตั้งแต่ 0 ขึ้นไป");
+    render(); return;
+  }
+  cfg.budget = value;
+  saveConfig(); render();
+};
+$("cfgCycleDay").onchange = e => {
+  const value = Number(e.target.value);
+  if (!Number.isInteger(value) || value < 1 || value > 28) {
+    toast("วันเริ่มรอบต้องอยู่ระหว่าง 1 ถึง 28");
+    render(); return;
+  }
+  cfg.cycle = value;
+  saveConfig(); render();
+};
+
+render();
+</script>
+</body>
+</html>
